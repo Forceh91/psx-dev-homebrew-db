@@ -1,0 +1,356 @@
+name: Approve Submission → Generate Game PR
+
+on:
+  issue_comment:
+    types: [created]
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+concurrency:
+  group: serial-generator
+  cancel-in-progress: false
+
+jobs:
+  approve:
+    if: |
+      github.event.issue != null &&
+      contains(github.event.comment.body, '!approve')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      # ----------------------------
+      # Maintainer check
+      # ----------------------------
+      - name: Validate maintainer
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const commenter = context.payload.comment.user.login;
+
+            const { data: collabs } = await github.rest.repos.listCollaborators({
+              owner: context.repo.owner,
+              repo: context.repo.repo
+            });
+
+            const isMaintainer = collabs.some(u => u.login === commenter);
+
+            if (!isMaintainer) {
+              core.setFailed(`User ${commenter} is not a maintainer`);
+            }
+
+      # ----------------------------
+      # Parse Issue → JSON
+      # ----------------------------
+      - name: Parse issue + build JSON
+        uses: actions/github-script@v7
+        id: build
+        with:
+          script: |
+            const fs = require("fs");
+
+            const issue_number = context.payload.issue.number;
+
+            const { data: issue } = await github.rest.issues.get({
+              ...context.repo,
+              issue_number
+            });
+
+            const body = issue.body || "";
+
+            // =========================================================
+            // 🧠 ISSUE FORM STATE MACHINE PARSER
+            // =========================================================
+            function parseSections(body) {
+              const lines = body.split(/\r?\n/);
+
+              const sections = {};
+              let currentKey = null;
+
+              for (let line of lines) {
+                line = line.trimEnd();
+
+                if (line.startsWith("###")) {
+                  currentKey = line
+                    .replace(/^###\s*/, "")
+                    .replace(/\*/g, "")
+                    .trim()
+                    .toLowerCase();
+
+                  sections[currentKey] = "";
+                  continue;
+                }
+
+                if (!currentKey) continue;
+
+                if (line === "_No response_") {
+                  sections[currentKey] = null;
+                  continue;
+                }
+
+                sections[currentKey] += (sections[currentKey] ? "\n" : "") + line;
+              }
+
+              return sections;
+            }
+
+            const sections = parseSections(body);
+
+            // ----------------------------
+            // SAFE GETTER + CLEANER
+            // ----------------------------
+            function clean(v) {
+              if (v === undefined || v === null) return null;
+
+              const s = String(v).trim();
+
+              if (
+                s === "" ||
+                s.toLowerCase() === "null" ||
+                s.toLowerCase() === "_no response_"
+              ) return null;
+
+              return s;
+            }
+
+            function val(key) {
+              return clean(sections[key]);
+            }
+
+            // ----------------------------
+            // ARRAY CLEANER (fixes ["Horror", ""])
+            // ----------------------------
+            function toArray(text) {
+              if (!text) return [];
+
+              return text
+                .split("\n")
+                .map(l => clean(l))
+                .filter(Boolean);
+            }
+
+            // ----------------------------
+            // CHECKBOX PARSER
+            // ----------------------------
+            function parseCheckboxes(text) {
+              if (!text) return [];
+
+              return text
+                .split("\n")
+                .map(l => l.replace(/- \[.\]\s*/, "").trim())
+                .map(clean)
+                .filter(Boolean);
+            }
+
+            // ----------------------------
+            // NORMALISER
+            // ----------------------------
+            function norm(str) {
+              return str
+                .toLowerCase()
+                .replace(/\s+/g, "_")
+                .replace(/-/g, "_")
+                .replace(/[^a-z0-9_]/g, "");
+            }
+
+            // ----------------------------
+            // EMULATOR PARSER
+            // ----------------------------
+            function parseEmulators(text) {
+              if (!text) return {};
+
+              const out = {};
+              for (const line of text.split("\n")) {
+                const [k, v] = line.split(":");
+                if (!k || !v) continue;
+                out[norm(k)] = clean(v);
+              }
+              return out;
+            }
+
+            // ----------------------------
+            // CREDITS PARSER
+            // ----------------------------
+            function parseCredits(text) {
+              if (!text) return {};
+
+              const out = {};
+              for (const line of text.split("\n")) {
+                const [role, people] = line.split(":");
+                if (!role || !people) continue;
+
+                out[norm(role)] = people
+                  .split(",")
+                  .map(p => clean(p))
+                  .filter(Boolean);
+              }
+              return out;
+            }
+
+            // ----------------------------
+            // HARDWARE PARSER
+            // ----------------------------
+            function parseHardware(text) {
+              if (!text) {
+                return { hardware_tested: false, hardware_notes: null };
+              }
+
+              return {
+                hardware_tested: true,
+                hardware_notes: clean(text)
+              };
+            }
+
+            // ----------------------------
+            // LINK PARSER (FIXED - NO DOMAIN GUESSING)
+            // ----------------------------
+            function parseLinks(text) {
+              const result = {
+                website: null,
+                discord: null,
+                itch_io: null
+              };
+
+              if (!text) return result;
+
+              const lines = text.split("\n").map(clean).filter(Boolean);
+
+              for (const line of lines) {
+                const lower = line.toLowerCase();
+
+                if (lower.includes("itch.io")) {
+                  result.itch_io = line;
+                }
+                else if (lower.includes("discord.gg") || lower.includes("discord.com")) {
+                  result.discord = line;
+                }
+                else if (line.startsWith("http")) {
+                  result.website = line;
+                }
+              }
+
+              return result;
+            }
+
+            // ----------------------------
+            // REQUIRED FIELD
+            // ----------------------------
+            const title = val("game title");
+
+            if (!title) {
+              core.setFailed(
+                "Missing Game Title.\n\nParsed sections:\n" +
+                JSON.stringify(sections, null, 2)
+              );
+            }
+
+            const safeTitle = String(title);
+
+            // ----------------------------
+            // SERIAL (collision-safe)
+            // ----------------------------
+            if (!fs.existsSync("games")) fs.mkdirSync("games");
+
+            const files = fs.readdirSync("games");
+
+            const nums = files
+              .map(f => f.match(/PSXD-(\d+)/))
+              .filter(Boolean)
+              .map(m => parseInt(m[1], 10));
+
+            const next = (nums.length ? Math.max(...nums) : 0) + 1;
+            const serial = `PSXD-${String(next).padStart(4, "0")}`;
+
+            // ----------------------------
+            // HARDWARE
+            // ----------------------------
+            const hw = parseHardware(val("hardware tested"));
+
+            // ----------------------------
+            // BUILD JSON
+            // ----------------------------
+            const json = {
+              serial,
+              title: clean(safeTitle),
+              slug: safeTitle
+                .toLowerCase()
+                .replace(/[^a-z0-9]+/g, "-")
+                .replace(/(^-|-$)/g, ""),
+
+              developer: val("developer / team name"),
+              publisher: val("developer / team name"),
+
+              year: Number(val("release year") || 0),
+
+              genre: toArray(val("primary genre")),
+
+              players: val("player count") || "1",
+              status: val("release status"),
+              description: val("game description"),
+
+              download_url: val("download url"),
+              source_url: val("source code url"),
+
+              disc_image_format: parseCheckboxes(
+                val("available disc image formats")
+              ),
+
+              emulator_compatibility: parseEmulators(
+                val("emulator compatibility")
+              ),
+
+              hardware_tested: hw.hardware_tested,
+              hardware_notes: hw.hardware_notes,
+
+              credits: parseCredits(val("credits")),
+
+              links: parseLinks(val("website / itch.io / discord")),
+
+              screenshots: [],
+              boxart: {},
+              tags: [],
+
+              submitted_by: issue.user.login,
+              submission_date: new Date().toISOString().split("T")[0],
+              last_updated: new Date().toISOString().split("T")[0]
+            };
+
+            const path = `games/${serial}.json`;
+            fs.writeFileSync(path, JSON.stringify(json, null, 2));
+
+            core.setOutput("serial", serial);
+            core.setOutput("file", path);
+
+      # ----------------------------
+      # PR creation
+      # ----------------------------
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          branch: submission/${{ steps.build.outputs.serial }}
+          title: "New Game Submission: ${{ steps.build.outputs.serial }}"
+          body: |
+            Auto-generated submission.
+
+            **Serial:** ${{ steps.build.outputs.serial }}
+
+            Closes #${{ github.event.issue.number }}
+
+      # ----------------------------
+      # Comment back
+      # ----------------------------
+      - name: Comment on issue
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const serial = "${{ steps.build.outputs.serial }}";
+
+            await github.rest.issues.createComment({
+              ...context.repo,
+              issue_number: context.issue.number,
+              body: `✅ Approved and processed as **${serial}**.\n\nA pull request has been created for review.`
+            });
