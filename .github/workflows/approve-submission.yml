@@ -141,7 +141,8 @@ jobs:
 
               return text
                 .split("\n")
-                .map(l => l.replace(/- \[.\]\s*/, "").trim())
+                .filter(l => /^-\s*\[x\]/i.test(l.trim()))
+                .map(l => l.replace(/^-\s*\[x\]\s*/i, "").trim())
                 .map(clean)
                 .filter(Boolean);
             }
