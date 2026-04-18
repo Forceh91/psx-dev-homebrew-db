@@ -134,8 +134,7 @@ Loaded on demand when a user clicks a game card.
   "disc_image_format": ["BIN/CUE", "ISO"],
   "emulator_compatibility": {
     "duckstation": "Perfect",
-    "retroarch_beetle_psx": "Perfect",
-    "epsxe": "Good"
+    "pcsx_redux": "Perfect"
   },
   "hardware_tested": true,
   "hardware_notes": "Tested on SCPH-7502 (PAL).",

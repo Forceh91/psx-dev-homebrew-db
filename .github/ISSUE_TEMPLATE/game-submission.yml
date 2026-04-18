@@ -7,10 +7,10 @@ body:
     attributes:
       value: |
         ## Welcome to the PlayStation Homebrew Database!
-        
+
         Please fill out this form carefully. All fields marked * are required.
         A maintainer will review your submission and assign you a **PSXD serial number**.
-        
+
         > **Serial format:** `PSXD-XXXX` — e.g. `PSXD-0042`
 
   - type: input
@@ -122,8 +122,7 @@ body:
       description: "List any emulators tested and how well the game runs"
       placeholder: |
         DuckStation: Perfect
-        RetroArch (Beetle PSX): Good
-        ePSXe: Untested
+        PCSX-Redux: Perfect
 
   - type: input
     id: hardware_tested

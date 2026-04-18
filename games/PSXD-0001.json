@@ -18,9 +18,7 @@
   "disc_image_format": ["BIN/CUE", "ISO"],
   "emulator_compatibility": {
     "duckstation": "Perfect",
-    "pcsx2": "N/A",
-    "epsxe": "Good",
-    "retroarch_beetle_psx": "Perfect"
+    "pcsx_redux": "Perfect"
   },
   "hardware_tested": true,
   "hardware_notes": "Tested on SCPH-7502 (PAL). Use FreePSXBoot for chipped consoles.",
