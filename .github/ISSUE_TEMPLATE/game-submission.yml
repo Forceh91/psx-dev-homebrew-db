@@ -146,8 +146,7 @@ body:
       description: "List any emulators tested and how well the game runs"
       placeholder: |
         DuckStation: Perfect
-        RetroArch (Beetle PSX): Good
-        ePSXe: Untested
+        PCSX-Redux: Good
 
   - type: input
     id: hardware_tested
