@@ -1,0 +1,42 @@
+{
+  "serial": "PSXD-0001",
+  "title": "Sauna",
+  "slug": "sauna",
+  "developer": "Zhamul",
+  "publisher": "Zhamul",
+  "year": 2026,
+  "genre": ["Adventure"],
+  "players": "1",
+  "status": "Complete",
+  "description": "Cozy smoke sauna to explore on your PlayStation.\n\nPlay on an emulator or on real hardware.\n\nAnalog controller in analog mode is required.\n\nUse dual sticks to move in first person. Press X to interact.\n\nMade with PSXSplash: https://github.com/psxsplash/splashedit",
+  "download_url": "https://zhamul.itch.io/sauna",
+  "source_url": "https://zhamul.itch.io/sauna",
+  "trailer_url": "https://www.youtube.com/watch?v=3wHqVDHefZU",
+  "disc_image_format": ["BIN/CUE"],
+  "emulator_compatibility": {
+    "duckstation": "Perfect",
+    "pcsx_redux": "Perfect"
+  },
+  "hardware_tested": false,
+  "hardware_notes": null,
+  "credits": {
+    "programming": ["Zhamul"],
+    "art": ["Zhamul"]
+  },
+  "links": {
+    "website": null,
+    "discord": null,
+    "itch_io": "https://zhamul.itch.io/sauna"
+  },
+  "screenshots": [
+    "assets/screenshots/PSXD-0001-01.jpg",
+    "assets/screenshots/PSXD-0001-02.jpg",
+    "assets/screenshots/PSXD-0001-03.jpg",
+    "assets/screenshots/PSXD-0001-04.jpg"
+  ],
+  "boxart": {},
+  "tags": [],
+  "submitted_by": "Forceh91",
+  "submission_date": "2026-04-18",
+  "last_updated": "2026-04-18"
+}
