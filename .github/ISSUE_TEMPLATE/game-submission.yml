@@ -99,6 +99,13 @@ body:
       required: true
 
   - type: input
+    id: trailer_url
+    attributes:
+      label: "Trailer URL"
+      description: "YouTube link to a trailer or gameplay video, if you have one"
+      placeholder: "https://www.youtube.com/watch?v=..."
+
+  - type: input
     id: source_url
     attributes:
       label: "Source Code URL"

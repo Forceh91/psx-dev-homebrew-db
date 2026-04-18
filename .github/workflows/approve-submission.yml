@@ -206,6 +206,23 @@ jobs:
             }
 
             // ----------------------------
+            // TRAILER URL PARSER
+            // Accepts youtube.com/watch?v=, youtu.be/, youtube.com/embed/
+            // Returns null if missing or not a recognised YouTube URL
+            // ----------------------------
+            function parseTrailerUrl(text) {
+              const url = clean(text);
+              if (!url) return null;
+
+              const isYoutube = /(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/.test(url);
+              if (!isYoutube) {
+                core.warning(`trailer_url "${url}" doesn't look like a YouTube link — storing as-is`);
+              }
+
+              return url;
+            }
+
+            // ----------------------------
             // LINK PARSER (FIXED - NO DOMAIN GUESSING)
             // ----------------------------
             function parseLinks(text) {
@@ -268,7 +285,7 @@ jobs:
             // ----------------------------
             // HARDWARE
             // ----------------------------
-            const hw = parseHardware(val("hardware tested"));
+            const hw = parseHardware(val("hardware tested?"));
 
             // ----------------------------
             // BUILD JSON
@@ -294,6 +311,7 @@ jobs:
 
               download_url: val("download url"),
               source_url: val("source code url"),
+              trailer_url: parseTrailerUrl(val("trailer url")),
 
               disc_image_format: parseCheckboxes(
                 val("available disc image formats")
