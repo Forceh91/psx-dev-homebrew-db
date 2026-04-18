@@ -214,12 +214,17 @@ jobs:
               const url = clean(text);
               if (!url) return null;
 
-              const isYoutube = /(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/.test(url);
-              if (!isYoutube) {
+              const match = url.match(
+                /(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/
+              );
+
+              if (!match) {
                 core.warning(`trailer_url "${url}" doesn't look like a YouTube link — storing as-is`);
+                return url;
               }
 
-              return url;
+              // Always normalise to a clean watch URL, dropping ?si= and any other tracking params
+              return `https://www.youtube.com/watch?v=${match[1]}`;
             }
 
             // ----------------------------
