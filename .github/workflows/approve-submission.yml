@@ -260,6 +260,28 @@ jobs:
             }
 
             // ----------------------------
+            // REGION PARSER
+            // Maps full checkbox label text down to short codes
+            // ----------------------------
+            function parseRegion(text) {
+              const checked = parseCheckboxes(text);
+              if (!checked.length) return "Worldwide";
+
+              const map = {
+                "ntsc-u (north america)": "NTSC-U",
+                "ntsc-j (japan)":         "NTSC-J",
+                "pal (europe / australia)":"PAL",
+                "worldwide":              "Worldwide",
+              };
+
+              const codes = checked
+                .map(l => map[l.toLowerCase()] || l)
+                .filter(Boolean);
+
+              return codes.join(", ") || "Worldwide";
+            }
+
+            // ----------------------------
             // REQUIRED FIELD
             // ----------------------------
             const title = val("game title");
@@ -312,6 +334,7 @@ jobs:
               genre: toArray(val("primary genre")),
 
               players: val("player count") || "1",
+              region: parseRegion(val("region")),
               status: val("release status"),
               description: val("game description"),
 
@@ -375,7 +398,7 @@ jobs:
               developer: json.developer || "",
               year: json.year || 0,
               genre: json.genre || [],
-              region: "Worldwide",
+              region: json.region || "Worldwide",
               status: json.status || "",
               thumbnail: `assets/boxart/${json.serial}-thumb.png`
             };

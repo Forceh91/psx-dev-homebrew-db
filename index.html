@@ -692,6 +692,78 @@
       letter-spacing: 0.08em;
     }
 
+    /* ─── LIGHTBOX ─── */
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.95);
+      z-index: 300;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      cursor: zoom-out;
+    }
+
+    .lightbox.open { display: flex; }
+
+    .lightbox img {
+      max-width: 90vw;
+      max-height: 90vh;
+      object-fit: contain;
+      border: 1px solid var(--ps-border-bright);
+      cursor: default;
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: 1rem; right: 1rem;
+      background: none;
+      border: 1px solid var(--ps-border-bright);
+      color: var(--ps-muted);
+      width: 32px; height: 32px;
+      cursor: pointer;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s;
+      border-radius: 1px;
+    }
+
+    .lightbox-close:hover { color: var(--ps-white); border-color: var(--ps-white); }
+
+    .lightbox-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: 1px solid var(--ps-border-bright);
+      color: var(--ps-muted);
+      width: 36px; height: 36px;
+      cursor: pointer;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s;
+      border-radius: 1px;
+    }
+
+    .lightbox-nav:hover { color: var(--ps-white); border-color: var(--ps-white); }
+    .lightbox-prev { left: 1rem; }
+    .lightbox-next { right: 1rem; }
+
+    .lightbox-counter {
+      position: absolute;
+      bottom: 1rem;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--ps-muted);
+      letter-spacing: 0.12em;
+    }
+
     /* ─── TRAILER ─── */
     .trailer-wrap {
       position: relative;
@@ -1059,6 +1131,15 @@
     </div>
   </div>
 
+  <!-- LIGHTBOX -->
+  <div class="lightbox" id="lightbox">
+    <button class="lightbox-close" id="lightbox-close" aria-label="Close">✕</button>
+    <button class="lightbox-nav lightbox-prev" id="lightbox-prev" aria-label="Previous">‹</button>
+    <img id="lightbox-img" src="" alt="Screenshot">
+    <button class="lightbox-nav lightbox-next" id="lightbox-next" aria-label="Next">›</button>
+    <span class="lightbox-counter" id="lightbox-counter"></span>
+  </div>
+
   <footer>
     <span class="footer-left">PSXD // PSX.DEV HOMEBREW DATABASE // NOT AFFILIATED WITH SONY COMPUTER ENTERTAINMENT</span>
     <span class="footer-right">DATA SERVED FROM GITHUB // COMMUNITY MAINTAINED</span>
@@ -1252,8 +1333,12 @@
         document.getElementById('modal-actions').innerHTML = actions.join('');
 
         // ── DESCRIPTION ──
-        document.getElementById('modal-description').textContent =
-          d.description || 'No description available.';
+        const descEl = document.getElementById('modal-description');
+        descEl.innerHTML = (d.description || 'No description available.')
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/\n/g, '<br>');
 
         // ── DETAILS TABLE ──
         const detailRows = [
@@ -1293,13 +1378,17 @@
         // ── SCREENSHOTS ──
         const shots = d.screenshots || [];
         if (shots.length) {
-          const thumbs = shots.map(s => `
-            <div class="screenshot-thumb">
-              <img src="${REPO_RAW}/${s}" alt="Screenshot" loading="lazy">
+          const thumbs = shots.map((s, i) => `
+            <div class="screenshot-thumb" data-index="${i}" data-src="${REPO_RAW}/${s}">
+              <img src="${REPO_RAW}/${s}" alt="Screenshot ${i+1}" loading="lazy">
             </div>`).join('');
           document.getElementById('modal-screenshots').innerHTML = `
             <p class="modal-section-label">Screenshots</p>
             <div class="screenshots-strip">${thumbs}</div>`;
+
+          document.querySelectorAll('.screenshot-thumb[data-src]').forEach(el => {
+            el.addEventListener('click', () => openLightbox(shots.map(s => `${REPO_RAW}/${s}`), Number(el.dataset.index)));
+          });
         }
 
         // ── EMULATOR COMPAT ──
@@ -1371,6 +1460,54 @@
           </table>`;
       }
     }
+
+    // ── LIGHTBOX ──
+    let lbImages = [], lbIndex = 0;
+
+    function openLightbox(images, index) {
+      lbImages = images;
+      lbIndex = index;
+      showLightboxImage();
+      document.getElementById('lightbox').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+      document.getElementById('lightbox').classList.remove('open');
+      // only restore scroll if modal is also closed
+      if (!document.getElementById('modal-overlay').classList.contains('open')) {
+        document.body.style.overflow = '';
+      }
+    }
+
+    function showLightboxImage() {
+      document.getElementById('lightbox-img').src = lbImages[lbIndex];
+      document.getElementById('lightbox-counter').textContent =
+        `${lbIndex + 1} / ${lbImages.length}`;
+      document.getElementById('lightbox-prev').style.display = lbImages.length > 1 ? 'flex' : 'none';
+      document.getElementById('lightbox-next').style.display = lbImages.length > 1 ? 'flex' : 'none';
+    }
+
+    document.getElementById('lightbox-close').addEventListener('click', closeLightbox);
+    document.getElementById('lightbox').addEventListener('click', e => {
+      if (e.target === document.getElementById('lightbox')) closeLightbox();
+    });
+    document.getElementById('lightbox-prev').addEventListener('click', e => {
+      e.stopPropagation();
+      lbIndex = (lbIndex - 1 + lbImages.length) % lbImages.length;
+      showLightboxImage();
+    });
+    document.getElementById('lightbox-next').addEventListener('click', e => {
+      e.stopPropagation();
+      lbIndex = (lbIndex + 1) % lbImages.length;
+      showLightboxImage();
+    });
+    document.addEventListener('keydown', e => {
+      if (!document.getElementById('lightbox').classList.contains('open')) return;
+      if (e.key === 'ArrowLeft') { lbIndex = (lbIndex - 1 + lbImages.length) % lbImages.length; showLightboxImage(); }
+      if (e.key === 'ArrowRight') { lbIndex = (lbIndex + 1) % lbImages.length; showLightboxImage(); }
+      if (e.key === 'Escape') closeLightbox();
+    });
 
     function closeModal() {
       document.getElementById('modal-overlay').classList.remove('open');

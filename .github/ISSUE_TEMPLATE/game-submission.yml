@@ -50,6 +50,23 @@ body:
     validations:
       required: true
 
+  - type: checkboxes
+    id: region
+    attributes:
+      label: "Region *"
+      description: "Which regions is this release intended for?"
+      options:
+        - label: "NTSC-U (North America)"
+          required: false
+        - label: "NTSC-J (Japan)"
+          required: false
+        - label: "PAL (Europe / Australia)"
+          required: false
+        - label: "Worldwide"
+          required: false
+    validations:
+      required: true
+
   - type: dropdown
     id: genre
     attributes:
