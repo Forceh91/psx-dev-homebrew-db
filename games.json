@@ -1,6 +1,20 @@
 {
   "version": "1.0",
-  "last_updated": "2025-01-01",
-  "total_games": 0,
-  "games": []
+  "last_updated": "2026-04-18",
+  "total_games": 1,
+  "games": [
+    {
+      "serial": "PSXD-0001",
+      "title": "Sauna",
+      "slug": "sauna",
+      "developer": "Zhamul",
+      "year": 2026,
+      "genre": [
+        "Adventure"
+      ],
+      "region": "Worldwide",
+      "status": "Complete",
+      "thumbnail": "assets/boxart/PSXD-0001-thumb.png"
+    }
+  ]
 }
