@@ -449,7 +449,7 @@
     .modal-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.85);
+      background: rgba(0,0,0,0.88);
       z-index: 200;
       display: none;
       align-items: flex-start;
@@ -464,10 +464,13 @@
       background: var(--ps-panel);
       border: 1px solid var(--ps-border-bright);
       width: 100%;
-      max-width: 720px;
+      max-width: 960px;
       position: relative;
       animation: modal-in 0.18s ease;
       margin: auto;
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      min-height: 500px;
     }
 
     @keyframes modal-in {
@@ -475,70 +478,29 @@
       to   { opacity: 1; transform: translateY(0); }
     }
 
+    /* blue/teal top accent line */
     .modal::before {
       content: '';
       position: absolute;
       top: 0; left: 0; right: 0;
       height: 2px;
       background: linear-gradient(90deg, var(--ps-blue), var(--ps-teal));
+      z-index: 1;
     }
 
-    .modal-close {
-      position: absolute;
-      top: 12px; right: 12px;
-      background: none;
-      border: 1px solid var(--ps-border);
-      color: var(--ps-muted);
-      width: 28px; height: 28px;
-      cursor: pointer;
-      font-size: 14px;
+    /* ─── SIDEBAR ─── */
+    .modal-sidebar {
+      background: var(--ps-card);
+      border-right: 1px solid var(--ps-border);
       display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.15s;
-      border-radius: 1px;
-    }
-
-    .modal-close:hover { color: var(--ps-white); border-color: var(--ps-white); }
-
-    .modal-header {
-      padding: 2rem 2rem 1rem;
-      border-bottom: 1px solid var(--ps-border);
-    }
-
-    .modal-serial {
-      font-family: var(--font-mono);
-      font-size: 11px;
-      color: var(--ps-teal);
-      letter-spacing: 0.12em;
-      margin-bottom: 6px;
-    }
-
-    .modal-title {
-      font-family: var(--font-display);
-      font-size: 2.5rem;
-      letter-spacing: 0.04em;
-      color: var(--ps-white);
-    }
-
-    .modal-developer {
-      font-size: 12px;
-      color: var(--ps-muted);
-      font-family: var(--font-mono);
-      margin-top: 4px;
-    }
-
-    .modal-body {
-      padding: 1.5rem 2rem;
-      display: grid;
-      grid-template-columns: 1fr 2fr;
-      gap: 1.5rem;
+      flex-direction: column;
+      overflow: hidden;
     }
 
     .modal-art {
-      background: var(--ps-card);
-      border: 1px solid var(--ps-border);
+      width: 100%;
       aspect-ratio: 3/4;
+      background: var(--ps-black);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -547,6 +509,7 @@
       color: var(--ps-muted);
       text-align: center;
       overflow: hidden;
+      flex-shrink: 0;
     }
 
     .modal-art img {
@@ -555,14 +518,117 @@
       object-fit: cover;
     }
 
-    .modal-info { display: flex; flex-direction: column; gap: 1rem; }
+    .modal-sidebar-meta {
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      border-top: 1px solid var(--ps-border);
+    }
+
+    .modal-actions {
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      border-top: 1px solid var(--ps-border);
+      margin-top: auto;
+    }
+
+    .modal-actions .btn {
+      width: 100%;
+      text-align: center;
+      display: block;
+    }
+
+    /* ─── MAIN CONTENT ─── */
+    .modal-content {
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .modal-header {
+      padding: 1.5rem 1.75rem 1.25rem;
+      border-bottom: 1px solid var(--ps-border);
+      flex-shrink: 0;
+    }
+
+    .modal-serial {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--ps-teal);
+      letter-spacing: 0.15em;
+      margin-bottom: 4px;
+    }
+
+    .modal-title {
+      font-family: var(--font-display);
+      font-size: 2.2rem;
+      letter-spacing: 0.04em;
+      color: var(--ps-white);
+      line-height: 1;
+    }
+
+    .modal-developer {
+      font-size: 11px;
+      color: var(--ps-muted);
+      font-family: var(--font-mono);
+      margin-top: 6px;
+      letter-spacing: 0.06em;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 10px; right: 10px;
+      background: none;
+      border: 1px solid var(--ps-border);
+      color: var(--ps-muted);
+      width: 26px; height: 26px;
+      cursor: pointer;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s;
+      border-radius: 1px;
+      z-index: 2;
+    }
+
+    .modal-close:hover { color: var(--ps-white); border-color: var(--ps-white); }
+
+    .modal-scroll {
+      overflow-y: auto;
+      flex: 1;
+      padding: 1.5rem 1.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .modal-scroll::-webkit-scrollbar { width: 4px; }
+    .modal-scroll::-webkit-scrollbar-track { background: transparent; }
+    .modal-scroll::-webkit-scrollbar-thumb { background: var(--ps-border-bright); }
 
     .modal-description {
       font-size: 13px;
-      line-height: 1.7;
+      line-height: 1.75;
       color: #b0b0cc;
     }
 
+    /* ─── SECTION HEADINGS ─── */
+    .modal-section-label {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--ps-muted);
+      margin-bottom: 8px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid var(--ps-border);
+    }
+
+    /* ─── INFO TABLE ─── */
     .modal-table {
       width: 100%;
       border-collapse: collapse;
@@ -580,17 +646,140 @@
       letter-spacing: 0.08em;
       padding-right: 1rem;
       white-space: nowrap;
-      width: 120px;
+      width: 110px;
     }
 
-    .modal-table td:last-child {
-      color: var(--ps-white);
-    }
+    .modal-table td:last-child { color: var(--ps-white); }
 
-    .modal-actions {
-      padding: 1rem 2rem 1.5rem;
+    /* ─── SCREENSHOTS ─── */
+    .screenshots-strip {
       display: flex;
-      gap: 0.75rem;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
+
+    .screenshots-strip::-webkit-scrollbar { height: 3px; }
+    .screenshots-strip::-webkit-scrollbar-track { background: transparent; }
+    .screenshots-strip::-webkit-scrollbar-thumb { background: var(--ps-border-bright); }
+
+    .screenshot-thumb {
+      flex-shrink: 0;
+      width: 160px;
+      height: 100px;
+      background: var(--ps-black);
+      border: 1px solid var(--ps-border);
+      overflow: hidden;
+      cursor: pointer;
+      transition: border-color 0.15s;
+    }
+
+    .screenshot-thumb:hover { border-color: var(--ps-teal); }
+
+    .screenshot-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .screenshot-thumb.no-img {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-mono);
+      font-size: 9px;
+      color: var(--ps-border-bright);
+      letter-spacing: 0.08em;
+    }
+
+    /* ─── EMULATOR COMPAT ─── */
+    .emu-list {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .emu-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      padding: 4px 0;
+      border-bottom: 1px solid var(--ps-border);
+    }
+
+    .emu-name { color: var(--ps-muted); letter-spacing: 0.05em; }
+    .emu-status { color: var(--ps-white); }
+    .emu-status.compat-perfect { color: var(--ps-teal); }
+    .emu-status.compat-good { color: var(--ps-yellow); }
+    .emu-status.compat-bad, .emu-status.compat-broken { color: var(--ps-red); }
+    .emu-status.compat-untested { color: var(--ps-muted); }
+
+    /* ─── CREDITS ─── */
+    .credits-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+    }
+
+    .credit-row {
+      display: flex;
+      gap: 1rem;
+      padding: 4px 0;
+      border-bottom: 1px solid var(--ps-border);
+    }
+
+    .credit-role {
+      color: var(--ps-muted);
+      letter-spacing: 0.06em;
+      width: 110px;
+      flex-shrink: 0;
+    }
+
+    .credit-names { color: var(--ps-white); }
+
+    /* ─── TAGS ROW ─── */
+    .modal-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    /* sidebar meta table */
+    .sidebar-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: var(--font-mono);
+      font-size: 10px;
+    }
+
+    .sidebar-table td {
+      padding: 4px 0;
+      border-bottom: 1px solid var(--ps-border);
+    }
+
+    .sidebar-table td:first-child {
+      color: var(--ps-muted);
+      letter-spacing: 0.06em;
+      padding-right: 8px;
+      white-space: nowrap;
+    }
+
+    .sidebar-table td:last-child { color: var(--ps-white); }
+
+    @media (max-width: 680px) {
+      .modal { grid-template-columns: 1fr; }
+      .modal-sidebar {
+        border-right: none;
+        border-bottom: 1px solid var(--ps-border);
+        flex-direction: row;
+      }
+      .modal-art { aspect-ratio: 1/1; width: 120px; flex-shrink: 0; }
+      .modal-actions { flex-direction: row; flex-wrap: wrap; }
+      .modal-actions .btn { width: auto; }
     }
 
     .btn {
@@ -823,20 +1012,31 @@
   <div class="modal-overlay" id="modal-overlay" role="dialog" aria-modal="true">
     <div class="modal" id="modal">
       <button class="modal-close" id="modal-close" aria-label="Close">✕</button>
-      <div class="modal-header">
-        <p class="modal-serial" id="modal-serial"></p>
-        <h2 class="modal-title" id="modal-title"></h2>
-        <p class="modal-developer" id="modal-developer"></p>
-      </div>
-      <div class="modal-body">
+
+      <!-- LEFT SIDEBAR -->
+      <div class="modal-sidebar">
         <div class="modal-art" id="modal-art">NO ART<br>SUBMITTED</div>
-        <div class="modal-info">
+        <div class="modal-sidebar-meta" id="modal-sidebar-meta"></div>
+        <div class="modal-actions" id="modal-actions"></div>
+      </div>
+
+      <!-- RIGHT CONTENT -->
+      <div class="modal-content">
+        <div class="modal-header">
+          <p class="modal-serial" id="modal-serial"></p>
+          <h2 class="modal-title" id="modal-title"></h2>
+          <p class="modal-developer" id="modal-developer"></p>
+        </div>
+        <div class="modal-scroll" id="modal-scroll">
           <p class="modal-description" id="modal-description"></p>
-          <table class="modal-table" id="modal-table"></table>
-          <div class="card-meta" id="modal-tags"></div>
+          <div id="modal-details"></div>
+          <div id="modal-screenshots"></div>
+          <div id="modal-emu"></div>
+          <div id="modal-credits"></div>
+          <div id="modal-links"></div>
         </div>
       </div>
-      <div class="modal-actions" id="modal-actions"></div>
+
     </div>
   </div>
 
@@ -962,86 +1162,177 @@
       const game = allGames.find(g => g.serial === serial);
       if (!game) return;
 
+      // Reset
       document.getElementById('modal-serial').textContent = game.serial;
       document.getElementById('modal-title').textContent = game.title;
       document.getElementById('modal-developer').textContent = `${game.developer} // ${game.year}`;
-
-      const artEl = document.getElementById('modal-art');
-      artEl.innerHTML = 'LOADING...';
-
-      document.getElementById('modal-description').textContent = game.description || '';
-      document.getElementById('modal-table').innerHTML = '';
-      document.getElementById('modal-tags').innerHTML = '';
+      document.getElementById('modal-art').innerHTML = 'LOADING...';
+      document.getElementById('modal-description').textContent = '';
+      document.getElementById('modal-sidebar-meta').innerHTML = '';
       document.getElementById('modal-actions').innerHTML = '';
+      document.getElementById('modal-details').innerHTML = '';
+      document.getElementById('modal-screenshots').innerHTML = '';
+      document.getElementById('modal-emu').innerHTML = '';
+      document.getElementById('modal-credits').innerHTML = '';
+      document.getElementById('modal-links').innerHTML = '';
+      document.getElementById('modal-scroll').scrollTop = 0;
 
       document.getElementById('modal-overlay').classList.add('open');
       document.body.style.overflow = 'hidden';
 
       try {
-        const slugOrSerial = game.slug || game.serial;
         const res = await fetch(`${REPO_RAW}/games/${game.serial}.json`);
         if (!res.ok) throw new Error('No detail file');
-        const detail = await res.json();
+        const d = await res.json();
 
-        if (detail.boxart && detail.boxart.front) {
-          artEl.innerHTML = `<img src="${REPO_RAW}/${detail.boxart.front}" alt="${detail.title} front cover">`;
-        } else {
-          artEl.innerHTML = 'NO ART<br>SUBMITTED';
-        }
+        // ── BOXART ──
+        const artEl = document.getElementById('modal-art');
+        artEl.innerHTML = (d.boxart && d.boxart.front)
+          ? `<img src="${REPO_RAW}/${d.boxart.front}" alt="${d.title} front cover">`
+          : 'NO ART<br>SUBMITTED';
 
-        document.getElementById('modal-description').textContent =
-          detail.description || game.description || 'No description available.';
-
-        const rows = [
-          ['Serial', detail.serial],
-          ['Developer', detail.developer],
-          ['Publisher', detail.publisher || detail.developer],
-          ['Year', detail.year],
-          ['Genre', (detail.genre||[]).join(', ')],
-          ['Players', detail.players || '1'],
-          ['Status', detail.status],
-          ['Version', detail.version],
-          ['Format', (detail.disc_image_format||[]).join(', ')],
-          ['Hardware', detail.hardware_tested ? (detail.hardware_notes||'Yes') : 'Not tested'],
+        // ── SIDEBAR META ──
+        const sidebarRows = [
+          ['Serial',   d.serial],
+          ['Status',   d.status],
+          ['Players',  d.players || '1'],
+          ['Region',   d.region || 'Worldwide'],
+          ['Language', (d.language||[]).join(', ')],
+          ['Version',  d.version],
+          ['Format',   (d.disc_image_format||[]).join(', ')],
+          ['Released', d.release_date || d.year],
         ].filter(r => r[1]);
 
-        document.getElementById('modal-table').innerHTML = rows.map(([k,v]) =>
-          `<tr><td>${k}</td><td>${v}</td></tr>`
-        ).join('');
+        document.getElementById('modal-sidebar-meta').innerHTML = `
+          <table class="sidebar-table">
+            ${sidebarRows.map(([k,v]) => `<tr><td>${k}</td><td>${v}</td></tr>`).join('')}
+          </table>
+          <div class="modal-tags" style="margin-top:8px;">
+            <span class="tag ${statusClass(d.status)}">${d.status}</span>
+            ${(d.genre||[]).map(g => `<span class="tag tag-genre">${g}</span>`).join('')}
+          </div>`;
 
-        const tags = (detail.genre||[]).map(g =>
-          `<span class="tag tag-genre">${g}</span>`
-        ).join('');
-        const status = `<span class="tag ${statusClass(detail.status)}">${detail.status}</span>`;
-        document.getElementById('modal-tags').innerHTML = status + tags;
-
+        // ── ACTION BUTTONS ──
         const actions = [];
-        if (detail.download_url) actions.push(
-          `<a href="${detail.download_url}" class="btn btn-primary" target="_blank">▶ Download</a>`
+        if (d.download_url) actions.push(
+          `<a href="${d.download_url}" class="btn btn-primary" target="_blank">▶ Download</a>`
         );
-        if (detail.source_url) actions.push(
-          `<a href="${detail.source_url}" class="btn btn-ghost" target="_blank">Source Code</a>`
+        if (d.source_url) actions.push(
+          `<a href="${d.source_url}" class="btn btn-ghost" target="_blank">Source Code</a>`
         );
-        if (detail.links && detail.links.itch_io) actions.push(
-          `<a href="${detail.links.itch_io}" class="btn btn-ghost" target="_blank">itch.io</a>`
+        if (d.links && d.links.itch_io) actions.push(
+          `<a href="${d.links.itch_io}" class="btn btn-ghost" target="_blank">itch.io</a>`
+        );
+        if (d.links && d.links.website) actions.push(
+          `<a href="${d.links.website}" class="btn btn-ghost" target="_blank">Website</a>`
+        );
+        if (d.links && d.links.discord) actions.push(
+          `<a href="${d.links.discord}" class="btn btn-ghost" target="_blank">Discord</a>`
         );
         document.getElementById('modal-actions').innerHTML = actions.join('');
 
-      } catch {
-        artEl.innerHTML = 'NO ART<br>SUBMITTED';
-        if (!document.getElementById('modal-description').textContent) {
-          document.getElementById('modal-description').textContent = game.description || '';
-        }
-        const basic = [
-          ['Serial', game.serial],
-          ['Developer', game.developer],
-          ['Year', game.year],
-          ['Genre', (game.genre||[]).join(', ')],
-          ['Status', game.status],
+        // ── DESCRIPTION ──
+        document.getElementById('modal-description').textContent =
+          d.description || 'No description available.';
+
+        // ── DETAILS TABLE ──
+        const detailRows = [
+          ['Developer',  d.developer],
+          ['Publisher',  d.publisher !== d.developer ? d.publisher : null],
+          ['Genre',      (d.genre||[]).join(', ')],
+          ['Hardware',   d.hardware_tested ? (d.hardware_notes || 'Tested on real hardware') : 'Not tested on hardware'],
+          ['Submitted',  d.submitted_by ? `${d.submitted_by} · ${d.submission_date||''}` : null],
+          ['Updated',    d.last_updated],
         ].filter(r => r[1]);
-        document.getElementById('modal-table').innerHTML = basic.map(([k,v]) =>
-          `<tr><td>${k}</td><td>${v}</td></tr>`
-        ).join('');
+
+        document.getElementById('modal-details').innerHTML = `
+          <p class="modal-section-label">Details</p>
+          <table class="modal-table">
+            ${detailRows.map(([k,v]) => `<tr><td>${k}</td><td>${v}</td></tr>`).join('')}
+          </table>`;
+
+        // ── SCREENSHOTS ──
+        const shots = d.screenshots || [];
+        if (shots.length) {
+          const thumbs = shots.map(s => `
+            <div class="screenshot-thumb">
+              <img src="${REPO_RAW}/${s}" alt="Screenshot" loading="lazy">
+            </div>`).join('');
+          document.getElementById('modal-screenshots').innerHTML = `
+            <p class="modal-section-label">Screenshots</p>
+            <div class="screenshots-strip">${thumbs}</div>`;
+        }
+
+        // ── EMULATOR COMPAT ──
+        const emu = d.emulator_compatibility || {};
+        const emuKeys = Object.keys(emu);
+        if (emuKeys.length) {
+          const emuLabels = {
+            duckstation: 'DuckStation',
+            retroarch_beetle_psx: 'RetroArch (Beetle)',
+            epsxe: 'ePSXe',
+            pcsx2: 'PCSX2',
+            pcsx_r: 'PCSX-R',
+          };
+          const rows = emuKeys.map(k => {
+            const val = emu[k];
+            const cls = 'compat-' + val.toLowerCase().replace(/\s+/g, '-');
+            const label = emuLabels[k] || k;
+            return `<div class="emu-row">
+              <span class="emu-name">${label}</span>
+              <span class="emu-status ${cls}">${val}</span>
+            </div>`;
+          }).join('');
+          document.getElementById('modal-emu').innerHTML = `
+            <p class="modal-section-label">Emulator Compatibility</p>
+            <div class="emu-list">${rows}</div>`;
+        }
+
+        // ── CREDITS ──
+        const credits = d.credits || {};
+        const creditKeys = Object.keys(credits);
+        if (creditKeys.length) {
+          const rows = creditKeys.map(role => {
+            const names = Array.isArray(credits[role]) ? credits[role].join(', ') : credits[role];
+            return `<div class="credit-row">
+              <span class="credit-role">${role}</span>
+              <span class="credit-names">${names}</span>
+            </div>`;
+          }).join('');
+          document.getElementById('modal-credits').innerHTML = `
+            <p class="modal-section-label">Credits</p>
+            <div class="credits-grid">${rows}</div>`;
+        }
+
+        // ── TAGS ──
+        const tags = (d.tags||[]);
+        if (tags.length) {
+          document.getElementById('modal-links').innerHTML = `
+            <div class="modal-tags">
+              ${tags.map(t => `<span class="tag tag-genre">${t}</span>`).join('')}
+            </div>`;
+        }
+
+      } catch {
+        // Fallback to index data
+        document.getElementById('modal-art').innerHTML = 'NO ART<br>SUBMITTED';
+        document.getElementById('modal-description').textContent = game.description || 'No description available.';
+        document.getElementById('modal-sidebar-meta').innerHTML = `
+          <table class="sidebar-table">
+            <tr><td>Serial</td><td>${game.serial}</td></tr>
+            <tr><td>Status</td><td>${game.status || '—'}</td></tr>
+            <tr><td>Genre</td><td>${(game.genre||[]).join(', ') || '—'}</td></tr>
+          </table>
+          <div class="modal-tags" style="margin-top:8px;">
+            <span class="tag ${statusClass(game.status)}">${game.status || 'WIP'}</span>
+            ${(game.genre||[]).map(g => `<span class="tag tag-genre">${g}</span>`).join('')}
+          </div>`;
+        document.getElementById('modal-details').innerHTML = `
+          <p class="modal-section-label">Details</p>
+          <table class="modal-table">
+            <tr><td>Developer</td><td>${game.developer}</td></tr>
+            <tr><td>Year</td><td>${game.year}</td></tr>
+          </table>`;
       }
     }
 
