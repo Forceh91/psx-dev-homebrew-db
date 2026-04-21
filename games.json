@@ -1,7 +1,7 @@
 {
   "version": "1.0",
-  "last_updated": "2026-04-18",
-  "total_games": 1,
+  "last_updated": "2026-04-21",
+  "total_games": 2,
   "games": [
     {
       "serial": "PSXD-0001",
@@ -15,6 +15,19 @@
       "region": "Worldwide",
       "status": "Complete",
       "thumbnail": "assets/boxart/PSXD-0001-thumb.png"
+    },
+    {
+      "serial": "PSXD-0002",
+      "title": "The Lost Voyage",
+      "slug": "the-lost-voyage",
+      "developer": "Locked Door Puzzle",
+      "year": 2025,
+      "genre": [
+        "Adventure"
+      ],
+      "region": "NTSC-U",
+      "status": "Complete",
+      "thumbnail": "assets/boxart/PSXD-0002-thumb.png"
     }
   ]
 }
