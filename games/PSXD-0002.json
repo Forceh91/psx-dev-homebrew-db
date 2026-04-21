@@ -1,0 +1,38 @@
+{
+  "serial": "PSXD-0002",
+  "title": "The Lost Voyage",
+  "slug": "the-lost-voyage",
+  "developer": "Locked Door Puzzle",
+  "publisher": "Locked Door Puzzle",
+  "year": 2025,
+  "genre": ["Adventure"],
+  "players": "1",
+  "region": "NTSC-U",
+  "status": "Complete",
+  "description": "The Lost Voyage is a space opera visual novel. After a failed fleet battle the four remaining crew of the Auracon find themselves alone stranded in remote space. There they discover something that could change the universe. Facing up against what this could mean will force each of them to confront their own pasts and decide who they truly want to be.",
+  "download_url": "https://lockeddoorpuzzle.itch.io/the-lost-voyage",
+  "source_url": null,
+  "trailer_url": null,
+  "disc_image_format": ["BIN/CUE"],
+  "emulator_compatibility": {
+    "duckstation": "Perfect"
+  },
+  "hardware_tested": true,
+  "hardware_notes": "SCPH-5552 (PAL)",
+  "credits": {},
+  "links": {
+    "website": null,
+    "discord": null,
+    "itch_io": "https://lockeddoorpuzzle.itch.io/the-lost-voyage"
+  },
+  "screenshots": [
+    "assets/screenshots/PSXD-0002-01.png",
+    "assets/screenshots/PSXD-0002-02.png",
+    "assets/screenshots/PSXD-0002-03.png"
+  ],
+  "boxart": { "front": "assets/boxart/PSXD-0002.png" },
+  "tags": [],
+  "submitted_by": "tnomad",
+  "submission_date": "2026-04-21",
+  "last_updated": "2026-04-21"
+}
