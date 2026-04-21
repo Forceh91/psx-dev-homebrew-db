@@ -318,6 +318,13 @@ jobs:
             // ----------------------------
             // BUILD JSON
             // ----------------------------
+              const screenshotText = val("screenshots") || "";
+              const screenshotCount = (screenshotText.match(/<img/g) || []).length || 1;
+              const screenshotPlaceholders = Array.from(
+                { length: screenshotCount },
+                (_, i) => `assets/screenshots/${serial}-${String(i + 1).padStart(2, "0")}.png`
+              );
+
             const json = {
               serial,
               title: clean(safeTitle),
@@ -357,8 +364,10 @@ jobs:
 
               links: parseLinks(val("website / itch.io / discord")),
 
-              screenshots: [],
-              boxart: {},
+              screenshots: screenshotPlaceholders,
+              boxart: {
+                front: `assets/boxart/${serial}-front.png`,
+              },
               tags: [],
 
               submitted_by: issue.user.login,
