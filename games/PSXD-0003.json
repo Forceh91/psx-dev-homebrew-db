@@ -5,9 +5,7 @@
   "developer": "Locked Door Puzzle",
   "publisher": "Locked Door Puzzle",
   "year": 2026,
-  "genre": [
-    "Adventure"
-  ],
+  "genre": ["Adventure"],
   "players": "1",
   "region": "NTSC-U",
   "status": "Complete",
@@ -15,15 +13,18 @@
   "download_url": "https://lockeddoorpuzzle.itch.io/build-artifacts",
   "source_url": null,
   "trailer_url": null,
-  "disc_image_format": [
-    "BIN/CUE"
-  ],
+  "disc_image_format": ["BIN/CUE"],
   "emulator_compatibility": {
     "duckstation": "Perfect"
   },
   "hardware_tested": false,
   "hardware_notes": null,
-  "credits": {},
+  "credits": {
+    "game": "Richard Perrin",
+    "ship model": "Psionic Games",
+    "station model": "Beardy Luke",
+    "music": "Ovani Sound"
+  },
   "links": {
     "website": null,
     "discord": null,
