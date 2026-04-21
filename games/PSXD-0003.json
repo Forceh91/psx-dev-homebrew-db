@@ -1,0 +1,45 @@
+{
+  "serial": "PSXD-0003",
+  "title": "Build Artifacts",
+  "slug": "build-artifacts",
+  "developer": "Locked Door Puzzle",
+  "publisher": "Locked Door Puzzle",
+  "year": 2026,
+  "genre": [
+    "Adventure"
+  ],
+  "players": "1",
+  "region": "NTSC-U",
+  "status": "Complete",
+  "description": "Build Artifacts is a sci-fi narrative mystery. You are the last operator on space station orbiting a dead world. You have the solemn duty to scan this planet for artifacts to learn what happened to this people in the hope it can save your own.",
+  "download_url": "https://lockeddoorpuzzle.itch.io/build-artifacts",
+  "source_url": null,
+  "trailer_url": null,
+  "disc_image_format": [
+    "BIN/CUE"
+  ],
+  "emulator_compatibility": {
+    "duckstation": "Perfect"
+  },
+  "hardware_tested": false,
+  "hardware_notes": null,
+  "credits": {},
+  "links": {
+    "website": null,
+    "discord": null,
+    "itch_io": "https://lockeddoorpuzzle.itch.io/build-artifacts"
+  },
+  "screenshots": [
+    "assets/screenshots/PSXD-0003-01.png",
+    "assets/screenshots/PSXD-0003-02.png",
+    "assets/screenshots/PSXD-0003-03.png",
+    "assets/screenshots/PSXD-0003-04.png"
+  ],
+  "boxart": {
+    "front": "assets/boxart/PSXD-0003-front.png"
+  },
+  "tags": [],
+  "submitted_by": "tnomad",
+  "submission_date": "2026-04-21",
+  "last_updated": "2026-04-21"
+}
