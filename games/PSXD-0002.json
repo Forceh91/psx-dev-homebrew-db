@@ -5,9 +5,7 @@
   "developer": "Locked Door Puzzle",
   "publisher": "Locked Door Puzzle",
   "year": 2025,
-  "genre": [
-    "Adventure"
-  ],
+  "genre": ["Adventure"],
   "players": "1",
   "region": "NTSC-U",
   "status": "Complete",
@@ -15,9 +13,7 @@
   "download_url": "https://lockeddoorpuzzle.itch.io/the-lost-voyage",
   "source_url": null,
   "trailer_url": null,
-  "disc_image_format": [
-    "BIN/CUE"
-  ],
+  "disc_image_format": ["BIN/CUE"],
   "emulator_compatibility": {
     "duckstation": "Perfect"
   },
@@ -29,8 +25,12 @@
     "discord": null,
     "itch_io": "https://lockeddoorpuzzle.itch.io/the-lost-voyage"
   },
-  "screenshots": [],
-  "boxart": {},
+  "screenshots": [
+    "assets/screenshots/PSXD-0002-01.png",
+    "assets/screenshots/PSXD-0002-02.png",
+    "assets/screenshots/PSXD-0002-03.png"
+  ],
+  "boxart": { "front": "assets/boxart/PSXD-0002.png" },
   "tags": [],
   "submitted_by": "tnomad",
   "submission_date": "2026-04-21",
