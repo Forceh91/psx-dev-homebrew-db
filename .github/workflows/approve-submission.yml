@@ -409,7 +409,7 @@ jobs:
               genre: json.genre || [],
               region: json.region || "Worldwide",
               status: json.status || "",
-              thumbnail: `assets/boxart/${json.serial}-thumb.png`
+              thumbnail: `assets/boxart/${json.serial}-front.png`
             };
 
             // upsert (idempotent)
