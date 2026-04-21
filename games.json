@@ -9,12 +9,10 @@
       "slug": "sauna",
       "developer": "Zhamul",
       "year": 2026,
-      "genre": [
-        "Adventure"
-      ],
+      "genre": ["Adventure"],
       "region": "Worldwide",
       "status": "Complete",
-      "thumbnail": "assets/boxart/PSXD-0001-thumb.png"
+      "thumbnail": "assets/boxart/PSXD-0001-front.png"
     },
     {
       "serial": "PSXD-0002",
@@ -22,12 +20,10 @@
       "slug": "the-lost-voyage",
       "developer": "Locked Door Puzzle",
       "year": 2025,
-      "genre": [
-        "Adventure"
-      ],
+      "genre": ["Adventure"],
       "region": "NTSC-U",
       "status": "Complete",
-      "thumbnail": "assets/boxart/PSXD-0002-thumb.png"
+      "thumbnail": "assets/boxart/PSXD-0002-front.png"
     }
   ]
 }
